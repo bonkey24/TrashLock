@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.deepface/
+lfw_data/
+users.db
+*.db

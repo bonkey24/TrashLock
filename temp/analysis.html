@@ -1,0 +1,371 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analysis — TrashLock</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'background': '#46344E',
+        'on-background': '#F5F1E8',
+        'surface': '#5A5560',
+        'on-surface': '#F5F1E8',
+        'surface-container': '#46344E',
+        'on-surface-variant': '#F5F1E8',
+        'muted': '#9D8D8F',
+        'outline': '#9D8D8F',
+        'outline-variant': '#9D8D8F',
+        'primary': '#FAED26',
+        'on-primary': '#46344E',
+        'primary-container': '#FAED26',
+        'on-primary-container': '#46344E',
+        'secondary': '#9B786F',
+        'on-secondary': '#1C1520',
+        'success': '#22C55E',
+        'on-success': '#052E16',
+        'success-container': '#22C55E',
+        'on-success-container': '#052E16',
+        'error': '#EF4444',
+        'on-error': '#1F0505',
+        'error-container': '#EF4444',
+        'on-error-container': '#1F0505',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '8px',
+        'md': '12px',
+        'lg': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '32px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Space Grotesk"', 'sans-serif'],
+        'body': ['"Space Grotesk"', 'sans-serif'],
+        'label': ['"Space Grotesk"', 'sans-serif'],
+        'mono': ['"JetBrains Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-md': ['40px', { lineHeight: '46px', letterSpacing: '-0.75px', fontWeight: '700' }],
+        'display-md-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-lg': ['32px', { lineHeight: '38px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-sm': ['12px', { lineHeight: '18px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '600' }],
+        'mono-lg': ['24px', { lineHeight: '32px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'mono-sm': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '220ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-background text-on-background font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col md:flex-row bg-background text-on-background" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Shared Left Sidebar -->
+    <aside class="w-full md:w-72 shrink-0 md:min-h-[1024px] bg-surface border-b md:border-b-0 md:border-r border-outline p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="md:min-h-[1024px]===md:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-md bg-primary-container text-on-primary-container border border-primary/30 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[22px]" aria-hidden="true">face</span>
+          </div>
+          <div>
+            <p class="font-headline text-headline-md font-bold text-primary leading-tight" data-design-text-token="headline-md">TrashLock</p>
+            <p class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Your body as a password</p>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav aria-label="Primary" class="flex flex-col gap-1.5">
+          <a href="../enrol/Enrol.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person_add</span>
+            <span data-design-text-token="label-lg">Enrol</span>
+          </a>
+          <a href="../login/Login.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">verified_user</span>
+            <span data-design-text-token="label-lg">Login</span>
+          </a>
+          <a href="../analysis/Analysis.html" aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded bg-primary-container text-on-primary-container border border-primary/30 font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">analytics</span>
+            <span data-design-text-token="label-lg">Analysis</span>
+          </a>
+          <a href="../test-log/TestLog.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">fact_check</span>
+            <span data-design-text-token="label-lg">Test Log</span>
+          </a>
+          <a href="#about" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">info</span>
+            <span data-design-text-token="label-lg">About</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Match Threshold Slider -->
+      <div class="pt-gutter-md border-t border-outline-variant flex flex-col gap-gutter-sm">
+        <div class="flex items-center justify-between gap-2">
+          <label for="match-threshold" class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">Match threshold</label>
+          <span id="threshold-value" class="font-mono text-label-lg text-primary tabular-nums" data-design-text-token="label-lg">0.38</span>
+        </div>
+        <input id="match-threshold" type="range" min="0.15" max="0.65" step="0.01" value="0.38" class="w-full h-1.5 rounded-full bg-surface-container accent-primary cursor-pointer">
+        <div class="flex items-center justify-between text-on-surface-variant">
+          <span class="font-body text-body-sm" data-design-text-token="body-sm">0.15 Strict</span>
+          <span class="font-body text-body-sm" data-design-text-token="body-sm">0.65 Lenient</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-gutter-lg md:p-page-margin max-w-6xl w-full mx-auto flex flex-col gap-gutter-lg">
+      <header class="flex flex-col gap-gutter-xs">
+        <h1 class="font-headline text-headline-lg text-on-background" data-design-text-token="headline-lg">Analysis</h1>
+        <p class="font-body text-body-md text-on-surface-variant text-pretty" data-design-text-token="body-md">
+          Evaluation of False Accept Rate (FAR), False Reject Rate (FRR), and Equal Error Rate (EER) across the enrolled dataset.
+        </p>
+      </header>
+
+      <!-- Top 3 Metric Cards -->
+      <section aria-label="Dataset summary" class="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg items-stretch">
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col justify-between gap-gutter-sm">
+          <span class="font-label text-label-sm text-on-surface-variant" data-design-text-token="label-sm">People</span>
+          <p class="font-mono text-display-md text-primary tabular-nums" data-design-text-token="display-md">18</p>
+          <span class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">5 template samples each</span>
+        </article>
+
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col justify-between gap-gutter-sm">
+          <span class="font-label text-label-sm text-on-surface-variant" data-design-text-token="label-sm">Genuine pairs</span>
+          <p class="font-mono text-display-md text-primary tabular-nums" data-design-text-token="display-md">162</p>
+          <span class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Same-identity comparisons</span>
+        </article>
+
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col justify-between gap-gutter-sm">
+          <span class="font-label text-label-sm text-on-surface-variant" data-design-text-token="label-sm">Impostor pairs</span>
+          <p class="font-mono text-display-md text-primary tabular-nums" data-design-text-token="display-md">1,458</p>
+          <span class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Cross-identity comparisons</span>
+        </article>
+      </section>
+
+      <!-- Charts Row -->
+      <section aria-label="Error rate and distance distributions" class="grid grid-cols-1 lg:grid-cols-2 gap-gutter-lg items-stretch">
+        <!-- Line Chart: FAR (#9B786F) vs FRR (#FAED26) with EER marked -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col gap-gutter-md">
+          <header class="flex flex-wrap items-center justify-between gap-gutter-sm">
+            <div>
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">FAR vs FRR</h2>
+              <p class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Error rate across cosine distance thresholds</p>
+            </div>
+            <div class="flex items-center gap-gutter-md">
+              <span class="inline-flex items-center gap-1.5 font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>FAR
+              </span>
+              <span class="inline-flex items-center gap-1.5 font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>FRR
+              </span>
+            </div>
+          </header>
+
+          <div class="w-full">
+            <svg viewBox="0 0 460 230" class="w-full h-auto" role="img" aria-label="Line chart of FAR versus FRR with EER marked at 2.4 percent and threshold 0.38">
+              <!-- Gridlines (#9D8D8F) -->
+              <line x1="48" y1="20" x2="440" y2="20" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+              <line x1="48" y1="62" x2="440" y2="62" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+              <line x1="48" y1="104" x2="440" y2="104" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+              <line x1="48" y1="146" x2="440" y2="146" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+              <line x1="48" y1="188" x2="440" y2="188" stroke="#9D8D8F" stroke-width="1"></line>
+
+              <!-- Y-axis labels (#9D8D8F) -->
+              <text x="40" y="24" text-anchor="end" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">40%</text>
+              <text x="40" y="66" text-anchor="end" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">30%</text>
+              <text x="40" y="108" text-anchor="end" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">20%</text>
+              <text x="40" y="150" text-anchor="end" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">10%</text>
+              <text x="40" y="192" text-anchor="end" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0%</text>
+
+              <!-- X-axis labels -->
+              <text x="48" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.15</text>
+              <text x="146" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.28</text>
+              <text x="234" y="210" text-anchor="middle" fill="#FAED26" font-size="11" font-weight="600" font-family="JetBrains Mono, monospace">0.38</text>
+              <text x="342" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.52</text>
+              <text x="440" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.65</text>
+
+              <!-- EER vertical guide -->
+              <line x1="234" y1="20" x2="234" y2="188" stroke="#9D8D8F" stroke-width="1" stroke-dasharray="4 4"></line>
+
+              <!-- FRR Curve (#FAED26) -->
+              <path d="M48 34 C105 56, 165 138, 234 176 C295 186, 365 188, 440 188" fill="none" stroke="#FAED26" stroke-width="2.5" stroke-linecap="round"></path>
+
+              <!-- FAR Curve (#9B786F) -->
+              <path d="M48 188 C120 188, 178 186, 234 176 C298 142, 368 74, 440 28" fill="none" stroke="#9B786F" stroke-width="2.5" stroke-linecap="round"></path>
+
+              <!-- EER Intersection Marker -->
+              <circle cx="234" cy="176" r="5.5" fill="#46344E" stroke="#FAED26" stroke-width="2.5"></circle>
+              <rect x="172" y="136" width="124" height="24" rx="6" fill="#46344E" stroke="#9D8D8F" stroke-width="1"></rect>
+              <text x="234" y="152" text-anchor="middle" fill="#F5F1E8" font-size="11" font-weight="600" font-family="JetBrains Mono, monospace">EER 2.4% @ 0.38</text>
+            </svg>
+          </div>
+        </article>
+
+        <!-- Histogram: Genuine (#FAED26) vs Impostor (#9B786F) Distances -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col gap-gutter-md">
+          <header class="flex flex-wrap items-center justify-between gap-gutter-sm">
+            <div>
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Distance distribution</h2>
+              <p class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Genuine vs impostor cosine distance histogram</p>
+            </div>
+            <div class="flex items-center gap-gutter-md">
+              <span class="inline-flex items-center gap-1.5 font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>Genuine
+              </span>
+              <span class="inline-flex items-center gap-1.5 font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">
+                <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>Impostor
+              </span>
+            </div>
+          </header>
+
+          <div class="w-full">
+            <svg viewBox="0 0 460 230" class="w-full h-auto" role="img" aria-label="Histogram comparing genuine and impostor cosine distances">
+              <!-- Baseline & gridlines (#9D8D8F) -->
+              <line x1="32" y1="188" x2="440" y2="188" stroke="#9D8D8F" stroke-width="1"></line>
+              <line x1="32" y1="138" x2="440" y2="138" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+              <line x1="32" y1="88" x2="440" y2="88" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+              <line x1="32" y1="38" x2="440" y2="38" stroke="#9D8D8F" stroke-opacity="0.35" stroke-width="1"></line>
+
+              <!-- Genuine bars (#FAED26) -->
+              <rect x="44" y="168" width="22" height="20" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+              <rect x="72" y="114" width="22" height="74" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+              <rect x="100" y="52" width="22" height="136" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+              <rect x="128" y="38" width="22" height="150" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+              <rect x="156" y="88" width="22" height="100" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+              <rect x="184" y="148" width="22" height="40" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+              <rect x="212" y="176" width="22" height="12" rx="3" fill="#FAED26" fill-opacity="0.9"></rect>
+
+              <!-- Impostor bars (#9B786F) -->
+              <rect x="212" y="180" width="22" height="8" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="240" y="164" width="22" height="24" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="268" y="118" width="22" height="70" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="296" y="64" width="22" height="124" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="324" y="42" width="22" height="146" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="352" y="84" width="22" height="104" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="380" y="138" width="22" height="50" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+              <rect x="408" y="170" width="22" height="18" rx="3" fill="#9B786F" fill-opacity="0.9"></rect>
+
+              <!-- Threshold Line at 0.38 -->
+              <line x1="223" y1="22" x2="223" y2="188" stroke="#FAED26" stroke-width="2" stroke-dasharray="4 4"></line>
+              <text x="223" y="16" text-anchor="middle" fill="#FAED26" font-size="11" font-weight="600" font-family="JetBrains Mono, monospace">0.38</text>
+
+              <!-- X-axis labels -->
+              <text x="55" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.10</text>
+              <text x="139" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.25</text>
+              <text x="223" y="210" text-anchor="middle" fill="#FAED26" font-size="11" font-weight="600" font-family="JetBrains Mono, monospace">0.38</text>
+              <text x="335" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.55</text>
+              <text x="419" y="210" text-anchor="middle" fill="#9D8D8F" font-size="11" font-family="JetBrains Mono, monospace">0.75</text>
+            </svg>
+          </div>
+        </article>
+      </section>
+
+      <!-- Results Table -->
+      <section aria-label="Threshold sweep results" class="flex flex-col gap-gutter-sm">
+        <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Results table</h2>
+        <!-- COMPONENT: table-standard -->
+        <div data-component-id="table-standard" data-component-type="table" data-component-variant="standard" class="bg-surface border border-outline rounded-md shadow-md overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container border-b border-outline">
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">Threshold</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">FAR</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">FRR</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">Accuracy</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant text-right">
+                    <span data-design-text-token="label-sm">F1 score</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant">
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">0.28</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">0.4%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">9.9%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">98.6%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums text-right"><span data-design-text-token="mono-sm">0.929</span></td>
+                </tr>
+                <tr class="bg-surface-container/70 hover:bg-surface-container transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-primary tabular-nums"><span data-design-text-token="mono-sm">0.38 (EER)</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">2.4%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">2.4%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">97.6%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-primary tabular-nums text-right"><span data-design-text-token="mono-sm">0.961</span></td>
+                </tr>
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">0.45</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">7.8%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">0.6%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">92.9%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums text-right"><span data-design-text-token="mono-sm">0.884</span></td>
+                </tr>
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">0.55</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">19.2%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">0.0%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">82.7%</span></td>
+                  <td class="px-gutter-md py-3 font-mono text-mono-sm text-on-surface tabular-nums text-right"><span data-design-text-token="mono-sm">0.741</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const slider = document.getElementById('match-threshold');
+    const thresholdValue = document.getElementById('threshold-value');
+    slider.addEventListener('input', () => {
+      thresholdValue.textContent = parseFloat(slider.value).toFixed(2);
+    });
+  </script>
+
+
+</body></html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Log — TrashLock</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'background': '#46344E',
+        'on-background': '#F5F1E8',
+        'surface': '#5A5560',
+        'on-surface': '#F5F1E8',
+        'surface-container': '#46344E',
+        'on-surface-variant': '#F5F1E8',
+        'muted': '#9D8D8F',
+        'outline': '#9D8D8F',
+        'outline-variant': '#9D8D8F',
+        'primary': '#FAED26',
+        'on-primary': '#46344E',
+        'primary-container': '#FAED26',
+        'on-primary-container': '#46344E',
+        'secondary': '#9B786F',
+        'on-secondary': '#1C1520',
+        'success': '#22C55E',
+        'on-success': '#052E16',
+        'success-container': '#22C55E',
+        'on-success-container': '#052E16',
+        'error': '#EF4444',
+        'on-error': '#1F0505',
+        'error-container': '#EF4444',
+        'on-error-container': '#1F0505',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '8px',
+        'md': '12px',
+        'lg': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '32px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Space Grotesk"', 'sans-serif'],
+        'body': ['"Space Grotesk"', 'sans-serif'],
+        'label': ['"Space Grotesk"', 'sans-serif'],
+        'mono': ['"JetBrains Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-md': ['40px', { lineHeight: '46px', letterSpacing: '-0.75px', fontWeight: '700' }],
+        'display-md-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-lg': ['32px', { lineHeight: '38px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-sm': ['12px', { lineHeight: '18px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '600' }],
+        'mono-lg': ['24px', { lineHeight: '32px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'mono-sm': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '220ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-background text-on-background font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col md:flex-row bg-background text-on-background" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Shared Left Sidebar -->
+    <aside class="w-full md:w-72 shrink-0 md:min-h-[1024px] bg-surface border-b md:border-b-0 md:border-r border-outline p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="md:min-h-[1024px]===md:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-md bg-primary-container text-on-primary-container border border-primary/30 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[22px]" aria-hidden="true">face</span>
+          </div>
+          <div>
+            <p class="font-headline text-headline-md font-bold text-primary leading-tight" data-design-text-token="headline-md">TrashLock</p>
+            <p class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Your body as a password</p>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav aria-label="Primary" class="flex flex-col gap-1.5">
+          <a href="../enrol/Enrol.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person_add</span>
+            <span data-design-text-token="label-lg">Enrol</span>
+          </a>
+          <a href="../login/Login.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">verified_user</span>
+            <span data-design-text-token="label-lg">Login</span>
+          </a>
+          <a href="../analysis/Analysis.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">analytics</span>
+            <span data-design-text-token="label-lg">Analysis</span>
+          </a>
+          <a href="../test-log/TestLog.html" aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded bg-primary-container text-on-primary-container border border-primary/30 font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">fact_check</span>
+            <span data-design-text-token="label-lg">Test Log</span>
+          </a>
+          <a href="#about" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">info</span>
+            <span data-design-text-token="label-lg">About</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Match Threshold Slider -->
+      <div class="pt-gutter-md border-t border-outline-variant flex flex-col gap-gutter-sm">
+        <div class="flex items-center justify-between gap-2">
+          <label for="match-threshold" class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">Match threshold</label>
+          <span id="threshold-value" class="font-mono text-label-lg text-primary tabular-nums" data-design-text-token="label-lg">0.38</span>
+        </div>
+        <input id="match-threshold" type="range" min="0.15" max="0.65" step="0.01" value="0.38" class="w-full h-1.5 rounded-full bg-surface-container accent-primary cursor-pointer">
+        <div class="flex items-center justify-between text-on-surface-variant">
+          <span class="font-body text-body-sm" data-design-text-token="body-sm">0.15 Strict</span>
+          <span class="font-body text-body-sm" data-design-text-token="body-sm">0.65 Lenient</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-gutter-lg md:p-page-margin max-w-6xl w-full mx-auto flex flex-col gap-gutter-lg">
+      <header class="flex flex-wrap items-center justify-between gap-gutter-md">
+        <div class="flex flex-col gap-gutter-xs">
+          <h1 class="font-headline text-headline-lg text-on-background" data-design-text-token="headline-lg">Test Log</h1>
+          <p class="font-body text-body-md text-on-surface-variant text-pretty" data-design-text-token="body-md">
+            Record verification scenarios, compare expected vs actual outcomes, and export results.
+          </p>
+        </div>
+
+        <!-- COMPONENT: button-with-icon -->
+        <button id="download-csv-btn" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" type="button" class="inline-flex items-center justify-center gap-gutter-sm px-gutter-md py-2.5 rounded bg-secondary text-on-secondary border border-outline font-label text-label-lg transition-colors duration-state-change ease-state-change hover:bg-primary hover:text-on-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+          <span class="material-symbols-outlined text-[18px]" aria-hidden="true">download</span>
+          <span data-design-text-token="label-lg">Download CSV</span>
+        </button>
+      </header>
+
+      <p id="csv-feedback" class="hidden font-body text-body-sm text-on-primary-container bg-primary-container border border-primary/30 rounded px-3 py-2" role="status"></p>
+
+      <!-- Add Row Form -->
+      <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col gap-gutter-md">
+        <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Add row</h2>
+        <form id="add-row-form" class="grid grid-cols-1 md:grid-cols-12 gap-gutter-md items-end">
+          <label class="md:col-span-4 flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">Test case</span>
+            <input id="input-test-case" type="text" placeholder="e.g., Enrolled user, side profile 30°" required class="w-full rounded bg-surface-container border border-outline px-3 py-2 font-body text-body-md text-on-surface placeholder:text-muted focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none">
+          </label>
+
+          <label class="md:col-span-3 flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">Expected</span>
+            <select id="input-expected" class="w-full rounded bg-surface-container border border-outline px-3 py-2 font-body text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none">
+              <option value="Access granted">Access granted</option>
+              <option value="Access denied">Access denied</option>
+            </select>
+          </label>
+
+          <label class="md:col-span-3 flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">Actual</span>
+            <input id="input-actual" type="text" placeholder="e.g., Access granted (0.295)" required class="w-full rounded bg-surface-container border border-outline px-3 py-2 font-body text-body-md text-on-surface placeholder:text-muted focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none">
+          </label>
+
+          <div class="md:col-span-2 flex items-end gap-2">
+            <button type="submit" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" class="w-full inline-flex items-center justify-center gap-1.5 px-gutter-md py-2 rounded bg-primary text-on-primary font-label text-label-lg transition-colors duration-state-change ease-state-change hover:bg-secondary hover:text-on-secondary">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+              <span data-design-text-token="label-lg">Add row</span>
+            </button>
+          </div>
+        </form>
+      </article>
+
+      <!-- Test Log Table -->
+      <section aria-label="Test cases table">
+        <!-- COMPONENT: table-standard -->
+        <div data-component-id="table-standard" data-component-type="table" data-component-variant="standard" class="bg-surface border border-outline rounded-md shadow-md overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-surface-container border-b border-outline">
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">Test case</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">Expected</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant">
+                    <span data-design-text-token="label-sm">Actual</span>
+                  </th>
+                  <th scope="col" class="px-gutter-md py-3 font-label text-label-sm text-on-surface-variant text-right">
+                    <span data-design-text-token="label-sm">Pass/Fail</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="test-log-tbody" class="divide-y divide-outline-variant">
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface"><span data-design-text-token="body-md">Enrolled user, front desk lighting</span></td>
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface-variant"><span data-design-text-token="body-md">Access granted</span></td>
+                  <td class="px-gutter-md py-3.5 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">Access granted (0.214)</span></td>
+                  <td class="px-gutter-md py-3.5 text-right">
+                    <span data-component-id="badge-success" data-component-type="badge" data-component-variant="success" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-container text-on-success-container border border-success/30 font-label text-label-sm">
+                      <span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span>
+                      <span data-design-text-token="label-sm">Pass</span>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface"><span data-design-text-token="body-md">Enrolled user wearing glasses</span></td>
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface-variant"><span data-design-text-token="body-md">Access granted</span></td>
+                  <td class="px-gutter-md py-3.5 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">Access granted (0.268)</span></td>
+                  <td class="px-gutter-md py-3.5 text-right">
+                    <span data-component-id="badge-success" data-component-type="badge" data-component-variant="success" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-container text-on-success-container border border-success/30 font-label text-label-sm">
+                      <span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span>
+                      <span data-design-text-token="label-sm">Pass</span>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface"><span data-design-text-token="body-md">Unregistered visitor</span></td>
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface-variant"><span data-design-text-token="body-md">Access denied</span></td>
+                  <td class="px-gutter-md py-3.5 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">Access denied (0.542)</span></td>
+                  <td class="px-gutter-md py-3.5 text-right">
+                    <span data-component-id="badge-success" data-component-type="badge" data-component-variant="success" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-container text-on-success-container border border-success/30 font-label text-label-sm">
+                      <span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span>
+                      <span data-design-text-token="label-sm">Pass</span>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface"><span data-design-text-token="body-md">Enrolled user, dim hallway light</span></td>
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface-variant"><span data-design-text-token="body-md">Access granted</span></td>
+                  <td class="px-gutter-md py-3.5 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">Access denied (0.412)</span></td>
+                  <td class="px-gutter-md py-3.5 text-right">
+                    <span data-component-id="badge-error" data-component-type="badge" data-component-variant="error" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container border border-error/30 font-label text-label-sm">
+                      <span class="material-symbols-outlined text-[14px]" aria-hidden="true">cancel</span>
+                      <span data-design-text-token="label-sm">Fail</span>
+                    </span>
+                  </td>
+                </tr>
+                <tr class="hover:bg-surface-container/50 transition-colors duration-state-change">
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface"><span data-design-text-token="body-md">Valid face with incorrect PIN</span></td>
+                  <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface-variant"><span data-design-text-token="body-md">Access denied</span></td>
+                  <td class="px-gutter-md py-3.5 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm">Access denied (PIN mismatch)</span></td>
+                  <td class="px-gutter-md py-3.5 text-right">
+                    <span data-component-id="badge-success" data-component-type="badge" data-component-variant="success" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-container text-on-success-container border border-success/30 font-label text-label-sm">
+                      <span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span>
+                      <span data-design-text-token="label-sm">Pass</span>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const slider = document.getElementById('match-threshold');
+    const thresholdValue = document.getElementById('threshold-value');
+    slider.addEventListener('input', () => {
+      thresholdValue.textContent = parseFloat(slider.value).toFixed(2);
+    });
+
+    const addRowForm = document.getElementById('add-row-form');
+    const tbody = document.getElementById('test-log-tbody');
+    addRowForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const testCase = document.getElementById('input-test-case').value.trim();
+      const expected = document.getElementById('input-expected').value;
+      const actual = document.getElementById('input-actual').value.trim();
+      if (!testCase || !actual) return;
+
+      const isPass = actual.toLowerCase().includes(expected.toLowerCase());
+      const badgeHtml = isPass
+        ? `<span data-component-id="badge-success" data-component-type="badge" data-component-variant="success" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-container text-on-success-container border border-success/30 font-label text-label-sm"><span class="material-symbols-outlined text-[14px]" aria-hidden="true">check_circle</span><span data-design-text-token="label-sm">Pass</span></span>`
+        : `<span data-component-id="badge-error" data-component-type="badge" data-component-variant="error" role="status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container border border-error/30 font-label text-label-sm"><span class="material-symbols-outlined text-[14px]" aria-hidden="true">cancel</span><span data-design-text-token="label-sm">Fail</span></span>`;
+
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-surface-container/50 transition-colors duration-state-change';
+      tr.innerHTML = `
+        <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface"><span data-design-text-token="body-md"></span></td>
+        <td class="px-gutter-md py-3.5 font-body text-body-md text-on-surface-variant"><span data-design-text-token="body-md"></span></td>
+        <td class="px-gutter-md py-3.5 font-mono text-mono-sm text-on-surface tabular-nums"><span data-design-text-token="mono-sm"></span></td>
+        <td class="px-gutter-md py-3.5 text-right">${badgeHtml}</td>
+      `;
+      tr.children[0].firstElementChild.textContent = testCase;
+      tr.children[1].firstElementChild.textContent = expected;
+      tr.children[2].firstElementChild.textContent = actual;
+      tbody.appendChild(tr);
+      addRowForm.reset();
+    });
+
+    const downloadCsvBtn = document.getElementById('download-csv-btn');
+    const csvFeedback = document.getElementById('csv-feedback');
+    downloadCsvBtn.addEventListener('click', () => {
+      const rowCount = tbody.querySelectorAll('tr').length;
+      csvFeedback.textContent = `Prepared ${rowCount} test log rows for CSV export.`;
+      csvFeedback.classList.remove('hidden');
+    });
+  </script>
+
+
+</body></html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — TrashLock</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'background': '#46344E',
+        'on-background': '#F5F1E8',
+        'surface': '#5A5560',
+        'on-surface': '#F5F1E8',
+        'surface-container': '#46344E',
+        'on-surface-variant': '#F5F1E8',
+        'muted': '#9D8D8F',
+        'outline': '#9D8D8F',
+        'outline-variant': '#9D8D8F',
+        'primary': '#FAED26',
+        'on-primary': '#46344E',
+        'primary-container': '#FAED26',
+        'on-primary-container': '#46344E',
+        'secondary': '#9B786F',
+        'on-secondary': '#1C1520',
+        'success': '#22C55E',
+        'on-success': '#052E16',
+        'success-container': '#22C55E',
+        'on-success-container': '#052E16',
+        'error': '#EF4444',
+        'on-error': '#1F0505',
+        'error-container': '#EF4444',
+        'on-error-container': '#1F0505',
+      },
+      borderRadius: {
+        'sm': '6px',
+        'DEFAULT': '8px',
+        'md': '12px',
+        'lg': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '40px',
+        'page-margin': '32px',
+      },
+      fontFamily: {
+        'display': ['"Space Grotesk"', 'sans-serif'],
+        'headline': ['"Space Grotesk"', 'sans-serif'],
+        'title': ['"Space Grotesk"', 'sans-serif'],
+        'body': ['"Space Grotesk"', 'sans-serif'],
+        'label': ['"Space Grotesk"', 'sans-serif'],
+        'mono': ['"JetBrains Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-md': ['40px', { lineHeight: '46px', letterSpacing: '-0.75px', fontWeight: '700' }],
+        'display-md-mobile': ['30px', { lineHeight: '36px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-lg': ['32px', { lineHeight: '38px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '600' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-sm': ['12px', { lineHeight: '18px', letterSpacing: '0.1px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '600' }],
+        'mono-lg': ['24px', { lineHeight: '32px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'mono-sm': ['13px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '220ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-background text-on-background font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col md:flex-row bg-background text-on-background" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Shared Left Sidebar -->
+    <aside class="w-full md:w-72 shrink-0 md:min-h-[1024px] bg-surface border-b md:border-b-0 md:border-r border-outline p-gutter-lg flex flex-col justify-between gap-gutter-xl" data-stitch-vh="md:min-h-[1024px]===md:min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-md bg-primary-container text-on-primary-container border border-primary/30 flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[22px]" aria-hidden="true">face</span>
+          </div>
+          <div>
+            <p class="font-headline text-headline-md font-bold text-primary leading-tight" data-design-text-token="headline-md">TrashLock</p>
+            <p class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Your body as a password</p>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav aria-label="Primary" class="flex flex-col gap-1.5">
+          <a href="../enrol/Enrol.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person_add</span>
+            <span data-design-text-token="label-lg">Enrol</span>
+          </a>
+          <a href="../login/Login.html" aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded bg-primary-container text-on-primary-container border border-primary/30 font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">verified_user</span>
+            <span data-design-text-token="label-lg">Login</span>
+          </a>
+          <a href="../analysis/Analysis.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">analytics</span>
+            <span data-design-text-token="label-lg">Analysis</span>
+          </a>
+          <a href="../test-log/TestLog.html" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">fact_check</span>
+            <span data-design-text-token="label-lg">Test Log</span>
+          </a>
+          <a href="#about" class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-secondary hover:bg-secondary font-label text-label-lg transition-colors duration-state-change ease-state-change">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">info</span>
+            <span data-design-text-token="label-lg">About</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Match Threshold Slider -->
+      <div class="pt-gutter-md border-t border-outline-variant flex flex-col gap-gutter-sm">
+        <div class="flex items-center justify-between gap-2">
+          <label for="match-threshold" class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">Match threshold</label>
+          <span id="threshold-value" class="font-mono text-label-lg text-primary tabular-nums" data-design-text-token="label-lg">0.38</span>
+        </div>
+        <input id="match-threshold" type="range" min="0.15" max="0.65" step="0.01" value="0.38" class="w-full h-1.5 rounded-full bg-surface-container accent-primary cursor-pointer">
+        <div class="flex items-center justify-between text-on-surface-variant">
+          <span class="font-body text-body-sm" data-design-text-token="body-sm">0.15 Strict</span>
+          <span class="font-body text-body-sm" data-design-text-token="body-sm">0.65 Lenient</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-gutter-lg md:p-page-margin max-w-6xl w-full mx-auto flex flex-col gap-gutter-lg">
+      <header class="flex flex-wrap items-center justify-between gap-gutter-md">
+        <div class="flex flex-col gap-gutter-xs">
+          <h1 class="font-headline text-headline-lg text-on-background" data-design-text-token="headline-lg">Login</h1>
+          <p class="font-body text-body-md text-on-surface-variant text-pretty" data-design-text-token="body-md">
+            Compare live webcam embeddings against enrolled templates using cosine distance.
+          </p>
+        </div>
+
+        <!-- Require PIN Toggle -->
+        <label class="inline-flex items-center gap-3 px-4 py-2.5 rounded-md bg-surface border border-outline cursor-pointer select-none">
+          <span class="font-label text-label-lg text-on-surface" data-design-text-token="label-lg">Require PIN</span>
+          <input id="require-pin-toggle" type="checkbox" class="sr-only peer">
+          <span class="relative w-10 h-6 bg-surface-container border border-outline rounded-full peer-checked:bg-primary peer-checked:border-primary transition-colors duration-state-change after:content-[&#39;&#39;] after:absolute after:top-0.5 after:left-0.5 after:bg-on-surface after:rounded-full after:h-4 after:w-4 after:transition-transform peer-checked:after:translate-x-4 peer-checked:after:bg-on-primary"></span>
+        </label>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
+        <!-- Left: Webcam Card -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="lg:col-span-7 bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col justify-between gap-gutter-md">
+          <header class="flex items-center justify-between gap-gutter-sm">
+            <div class="flex items-center gap-2.5">
+              <span data-component-id="badge-dot" data-component-type="badge" data-component-variant="dot" role="status" aria-label="Camera active" class="inline-block w-2.5 h-2.5 rounded-full bg-success"></span>
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Webcam feed</h2>
+            </div>
+            <span class="font-mono text-body-sm text-on-surface-variant tabular-nums" data-design-text-token="body-sm">640 × 480</span>
+          </header>
+
+          <div class="relative rounded overflow-hidden border border-outline bg-background aspect-[4/3]">
+            <img src="https://lh3.googleusercontent.com/aida/ALJJyrBrh7IVTc4Lh5uI6g4S8P0Amjzkwp0_7znyTCouEHHy6n7oEgtv8vkoe1Cnlt5byz1c8C3VJLitMqW1fT6A92krsSJC_SqwR9nCMiEbMs8J3GoJsyKZHaBBq0p-cKoW89xBin6807wteKdmnxef4gi1NLkc3PvXfuz6me50tNIYBkemppyjT-4jJrn-XVIwiSO7GI0Ph3n-nzEkoJ3tkWbqrtSOZyAX5wySvloBWh9zk3Ocdag" alt="Live webcam feed of participant authenticating" class="w-full h-full object-cover">
+            <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+              <path d="M135 75 H115 V95" stroke="#FAED26" stroke-width="2.5" stroke-linecap="round"></path>
+              <path d="M265 75 H285 V95" stroke="#FAED26" stroke-width="2.5" stroke-linecap="round"></path>
+              <path d="M135 225 H115 V205" stroke="#FAED26" stroke-width="2.5" stroke-linecap="round"></path>
+              <path d="M265 225 H285 V205" stroke="#FAED26" stroke-width="2.5" stroke-linecap="round"></path>
+            </svg>
+          </div>
+
+          <!-- Optional PIN input (visible when Require PIN is toggled on) -->
+          <div id="pin-row" class="hidden">
+            <label class="flex flex-col gap-gutter-xs">
+              <span class="font-label text-label-sm text-on-surface" data-design-text-token="label-sm">4-digit PIN</span>
+              <input id="login-pin-input" type="password" inputmode="numeric" maxlength="4" value="4829" placeholder="Enter PIN" class="w-full rounded bg-surface-container border border-outline px-3 py-2 font-mono text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none">
+            </label>
+          </div>
+
+          <footer class="flex flex-wrap items-center justify-between gap-gutter-sm pt-gutter-xs">
+            <button id="simulate-impostor-btn" data-component-id="button-secondary" data-component-type="button" data-component-variant="secondary" type="button" class="inline-flex items-center justify-center gap-gutter-sm px-gutter-md py-2.5 rounded bg-secondary text-on-secondary border border-outline font-label text-label-lg transition-colors duration-state-change ease-state-change hover:bg-primary hover:text-on-primary">
+              <span data-design-text-token="label-lg">Test impostor</span>
+            </button>
+
+            <button id="verify-btn" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" type="button" class="inline-flex items-center justify-center gap-gutter-sm px-gutter-md py-2.5 rounded bg-primary text-on-primary font-label text-label-lg transition-colors duration-state-change ease-state-change hover:bg-secondary hover:text-on-secondary">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">face_retouching_natural</span>
+              <span data-design-text-token="label-lg">Verify face</span>
+            </button>
+          </footer>
+        </article>
+
+        <!-- Right: Result Card -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="lg:col-span-5 bg-surface border border-outline rounded-md shadow-md p-gutter-lg flex flex-col justify-between gap-gutter-lg">
+          <div class="flex flex-col gap-gutter-lg">
+            <header class="flex flex-col gap-gutter-xs">
+              <h2 class="font-headline text-headline-md text-on-surface" data-design-text-token="headline-md">Verification result</h2>
+              <p class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Nearest template in gallery (18 enrolled)</p>
+            </header>
+
+            <!-- Large Status Badge -->
+            <div id="status-badge" role="status" class="rounded-md bg-success-container border border-success/40 p-gutter-md flex items-center gap-gutter-md">
+              <div id="status-icon-wrap" class="w-12 h-12 rounded-full bg-background text-success flex items-center justify-center shrink-0">
+                <span id="status-icon" class="material-symbols-outlined text-[28px]" aria-hidden="true">check_circle</span>
+              </div>
+              <div class="flex flex-col">
+                <span id="status-label" class="font-headline text-headline-lg text-on-success-container" data-design-text-token="headline-lg">Access granted</span>
+                <span id="status-sublabel" class="font-body text-body-sm text-on-success-container" data-design-text-token="body-sm">Distance within match threshold</span>
+              </div>
+            </div>
+
+            <!-- Result Metrics -->
+            <dl class="divide-y divide-outline-variant border-y border-outline-variant">
+              <div class="py-3.5 flex items-center justify-between gap-gutter-md">
+                <dt class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Closest match</dt>
+                <dd id="closest-match-val" class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">Maya Patel</dd>
+              </div>
+              <div class="py-3.5 flex items-center justify-between gap-gutter-md">
+                <dt class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Cosine distance</dt>
+                <dd id="cosine-dist-val" class="font-mono text-mono-lg text-primary tabular-nums" data-design-text-token="mono-lg">0.214</dd>
+              </div>
+              <div class="py-3.5 flex items-center justify-between gap-gutter-md">
+                <dt class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">Similarity %</dt>
+                <dd id="similarity-val" class="font-mono text-mono-lg text-primary tabular-nums" data-design-text-token="mono-lg">91.4%</dd>
+              </div>
+            </dl>
+          </div>
+
+          <footer class="rounded bg-surface-container border border-outline-variant p-3 flex items-center justify-between gap-2">
+            <span class="font-body text-body-sm text-on-surface-variant" data-design-text-token="body-sm">Decision rule</span>
+            <span id="decision-rule-val" class="font-mono text-mono-sm text-primary tabular-nums" data-design-text-token="mono-sm">0.214 ≤ 0.380</span>
+          </footer>
+        </article>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const slider = document.getElementById('match-threshold');
+    const thresholdValue = document.getElementById('threshold-value');
+    const pinToggle = document.getElementById('require-pin-toggle');
+    const pinRow = document.getElementById('pin-row');
+    const statusBadge = document.getElementById('status-badge');
+    const statusIconWrap = document.getElementById('status-icon-wrap');
+    const statusIcon = document.getElementById('status-icon');
+    const statusLabel = document.getElementById('status-label');
+    const statusSublabel = document.getElementById('status-sublabel');
+    const closestMatchVal = document.getElementById('closest-match-val');
+    const cosineDistVal = document.getElementById('cosine-dist-val');
+    const similarityVal = document.getElementById('similarity-val');
+    const decisionRuleVal = document.getElementById('decision-rule-val');
+
+    let currentDist = 0.214;
+    let currentMatch = 'Maya Patel';
+    let currentSim = '91.4%';
+
+    function renderResult() {
+      const thresh = parseFloat(slider.value);
+      thresholdValue.textContent = thresh.toFixed(2);
+      const granted = currentDist <= thresh;
+
+      closestMatchVal.textContent = currentMatch;
+      cosineDistVal.textContent = currentDist.toFixed(3);
+      similarityVal.textContent = currentSim;
+      decisionRuleVal.textContent = `${currentDist.toFixed(3)} ${granted ? '≤' : '>'} ${thresh.toFixed(3)}`;
+
+      if (granted) {
+        statusBadge.className = 'rounded-md bg-success-container border border-success/40 p-gutter-md flex items-center gap-gutter-md';
+        statusIconWrap.className = 'w-12 h-12 rounded-full bg-success text-on-success flex items-center justify-center shrink-0';
+        statusIcon.textContent = 'check_circle';
+        statusLabel.className = 'font-headline text-headline-lg text-on-success-container';
+        statusLabel.textContent = 'Access granted';
+        statusSublabel.className = 'font-body text-body-sm text-on-success-container/80';
+        statusSublabel.textContent = 'Distance within match threshold';
+      } else {
+        statusBadge.className = 'rounded-md bg-error-container border border-error/40 p-gutter-md flex items-center gap-gutter-md';
+        statusIconWrap.className = 'w-12 h-12 rounded-full bg-error text-on-error flex items-center justify-center shrink-0';
+        statusIcon.textContent = 'cancel';
+        statusLabel.className = 'font-headline text-headline-lg text-on-error-container';
+        statusLabel.textContent = 'Access denied';
+        statusSublabel.className = 'font-body text-body-sm text-on-error-container/80';
+        statusSublabel.textContent = 'Distance exceeds match threshold';
+      }
+    }
+
+    slider.addEventListener('input', renderResult);
+
+    pinToggle.addEventListener('change', () => {
+      pinRow.classList.toggle('hidden', !pinToggle.checked);
+    });
+
+    document.getElementById('simulate-impostor-btn').addEventListener('click', () => {
+      currentDist = 0.542;
+      currentMatch = 'Unknown (closest: Liam Chen)';
+      currentSim = '64.8%';
+      renderResult();
+    });
+
+    document.getElementById('verify-btn').addEventListener('click', () => {
+      currentDist = 0.214;
+      currentMatch = 'Maya Patel';
+      currentSim = '91.4%';
+      renderResult();
+    });
+  </script>
+
+
+</body></html>
