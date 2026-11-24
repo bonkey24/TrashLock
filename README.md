@@ -1,118 +1,263 @@
 # 🔐 TrashLock
 
-**TrashLock** is an educational face-recognition login system, presentation attack benchmarking tool, and biometric security prototype built with **Streamlit** and **facenet-pytorch** for the project _"TrashLock: Your Body as a Password"_.
+> **Your body as a password**
 
-## What it does
+An educational prototype demonstrating facial biometric authentication, matching threshold trade-offs, and presentation attack logging using PyTorch and Streamlit.
 
-| Page | Description |
-|---|---|
-| **👤 Enrol** | Register participants by capturing 3–5 face photos, computing a 512-d Facenet template, and storing it in SQLite alongside a salted SHA-256 PIN hash. Displays enrolled participants with individual delete actions. |
-| **🛡️ Login** | Capture live webcam photos, compare against enrolled templates using cosine distance, and grant/deny access based on the threshold slider. Features 2FA PIN verification and large status badges. |
-| **📊 Analysis** | Benchmark False Accept Rate (FAR), False Reject Rate (FRR), and Equal Error Rate (EER) across genuine and impostor face pairs from a public benchmark (LFW). |
-| **📋 Test Log** | Record experimental verification scenarios (spoof tests, lighting, accessories, wrong PIN) with Pass/Fail badges, SQLite persistence, and one-click CSV export. |
-| **ℹ️ About** | Student-friendly explanations of biometric principles (templates, cosine distance, FAR/FRR/EER trade-offs) and critical risks (spoofing, permanence, demographic bias, and 2FA). |
-
-> **Privacy Guarantee:** Only 512-dimensional numeric embeddings are stored in SQLite — photos are processed in-memory and **never** saved to disk.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.45.1-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Status](https://img.shields.io/badge/Status-Educational%20Prototype-F59E0B)]()
 
 ---
 
-## Setup (Windows)
+## 💡 What is TrashLock?
 
-### 1. Prerequisites
-- **Python 3.10+** (tested on Python 3.12)
-- Web camera (for Enrol and Login live capture)
+TrashLock is an educational face-login demonstration where you can drag the matching threshold live and watch strangers get in or genuine users get locked out. Built to explore biometric security transparently, it avoids opaque cloud APIs and runs entirely on your local machine. The system detects faces, converts them into compact mathematical vectors, and compares them using cosine distance. It gives learners and developers hands-on intuition for how real-world biometric systems balance usability against security.
 
-### 2. Create a Virtual Environment
+---
 
-Open PowerShell in the `biometric-prototype` directory:
+## ⚡ See It in 60 Seconds
+
+1. **Enrol a face**: Open the **Enrol** page, enter a username and an optional PIN, capture 3 to 5 webcam snapshots, and save the averaged biometric template.
+2. **Log in**: Navigate to the **Login** page, face the camera, and capture a photo to authenticate against enrolled templates in real time.
+3. **Drag the threshold slider**: Adjust the **Match threshold** slider in the sidebar from strict (e.g., 0.30) to lenient (e.g., 0.70) to watch how the access decision immediately changes between granted and denied.
+4. **Open Analysis**: Switch to the **Analysis** page, load the benchmark dataset sample, and inspect how threshold shifts affect error rates on interactive trade-off curves.
+
+---
+
+## 📸 Screenshots
+
+<!-- Replace the placeholder images in docs/screenshots/ with your real screenshots -->
+
+| Page | Preview |
+|---|---|
+| **Enrol** | ![Enrol Page](docs/screenshots/enrol.png)<br>_Capture face frames and register an averaged template._ |
+| **Login (Granted)** | ![Login Granted](docs/screenshots/login-granted.png)<br>_Successful biometric match granting access._ |
+| **Login (Denied)** | ![Login Denied](docs/screenshots/login-denied.png)<br>_Impostor rejection with distance above threshold._ |
+| **Analysis** | ![Analysis Page](docs/screenshots/analysis.png)<br>_Interactive FAR/FRR trade-off curves and distance distribution histograms._ |
+| **Test Log** | ![Test Log Page](docs/screenshots/test-log.png)<br>_Documenting physical presentation attack experiments with Pass/Fail badges._ |
+
+---
+
+## ✨ Features
+
+| Page / Capability | Description |
+|---|---|
+| **Enrol** | Captures 3 to 5 webcam samples, extracts and averages a 512-dimensional template, sets an optional fallback PIN, and lists enrolled participants with individual deletion. |
+| **Login** | Live 1:N facial verification against enrolled templates using cosine distance, complete with large status badges and score breakdowns. |
+| **Analysis** | Benchmarks False Accept Rate (FAR), False Reject Rate (FRR), and Equal Error Rate (EER) across genuine and impostor face pairs from a public benchmark. |
+| **Test Log** | Experimental logging form and table to record presentation attack scenarios (spoofing, photos, accessories, lighting) with Pass/Fail badges and CSV export. |
+| **About** | Explains core concepts (enrolment, templates, cosine distance, thresholds, error rates) and security vulnerabilities. |
+| **Optional PIN Second Factor** | Fallback or two-factor verification using a 4-digit PIN stored as a salted SHA-256 hash, toggleable directly on the Login page. |
+
+---
+
+## 🔍 How It Works
+
+```mermaid
+flowchart TD
+    A["Webcam Photo"] --> B["Face Detection (MTCNN)"]
+    B --> C["Feature Extraction (InceptionResnetV1)"]
+    C --> D["512-d Numeric Template"]
+    D --> E["Cosine Distance Calculation"]
+    F[("SQLite Stored Templates")] --> E
+    E --> G{"Distance < Threshold?"}
+    G -- "No (Distance ≥ Threshold)" --> H["Access Denied"]
+    G -- "Yes (Distance < Threshold)" --> I{"Require PIN Enabled?"}
+    I -- "No" --> J["Access Granted"]
+    I -- "Yes" --> K["Verify Salted PIN Hash"]
+    K -- "Valid PIN" --> J
+    K -- "Invalid PIN" --> H
+```
+
+- **Template**: A compact 512-dimensional vector of floating-point values generated by InceptionResnetV1 capturing distinctive facial geometry. Captured photos are processed in memory and never saved to disk.
+- **Distance**: Cosine distance ($d = 1 - \text{cosine similarity}$) measures vector divergence on a scale from 0.0 (identical direction) to 2.0 (opposite direction).
+- **Threshold**: The decision boundary ($\theta$). When the minimum distance between a probe frame and any enrolled template is below $\theta$, identity is confirmed; otherwise, access is rejected.
+
+---
+
+## 🧪 The Threshold Experiment
+
+Biometric authentication is never binary; it is an operating trade-off governed by the decision threshold. The table below presents real empirical measurements obtained from our evaluation on a small subset of the public Labeled Faces in the Wild (LFW) benchmark (14 people, 136 genuine pairs, 2,210 impostor pairs):
+
+| Threshold ($\theta$) | False Accept Rate (FAR) | False Reject Rate (FRR) | Operational Meaning |
+|:---:|:---:|:---:|---|
+| **0.40** | 0.05% | 17.65% | High security: nearly zero impostors breach the system, but approximately 1 in 6 genuine attempts is incorrectly rejected. |
+| **0.50** (Default) | 0.23% | 8.82% | Balanced default: keeps impostor acceptance very low while maintaining genuine rejection under 10%. |
+| **0.59** (EER) | 1.46% | 1.46% | Equal Error Rate: the theoretical crossover point where false acceptances and false rejections are identical. |
+
+The default threshold is set to 0.50 because it provides a strong security bias (FAR < 0.25%) while keeping false rejection under 10% for genuine users. Note clearly that this evaluation was conducted on a small, clean benchmark subset (14 people, 136 genuine pairs, 2,210 impostor pairs), so real-world error rates would be higher under unconstrained lighting, motion blur, varied camera sensors, and demographic diversity.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Tool / Library | Purpose |
+|---|---|---|
+| Language | Python (3.10+) | Application runtime and script logic |
+| Interface | Streamlit (1.45.1) | Reactive web UI, camera input component, and cached evaluation data |
+| Face Detection | facenet-pytorch (MTCNN, 2.6.0) | Multi-task cascaded face detection, bounding box cropping, and 160×160 alignment |
+| Feature Embedding | facenet-pytorch (InceptionResnetV1, 2.6.0) | Neural network pretrained on VGGFace2 producing 512-dimensional embeddings |
+| Deep Learning | PyTorch (`torch` 2.2.2, `torchvision` 0.17.2) | CPU tensor computation and model inference |
+| Matching & Math | NumPy (1.26.4) & SciPy (1.13.1) | Vector algebra, cosine distance calculation, and error curve sweeps |
+| Storage | SQLite (`sqlite3`) | Embedded database storing numeric templates and test logs |
+| PIN Security | Python `hashlib` & `secrets` | Salted SHA-256 PIN hashing with cryptographically secure random salts |
+| Visualizations | Matplotlib (3.8.4) | Styled FAR/FRR trade-off curves and distance distribution histograms |
+| Benchmark Loader | scikit-learn (1.5.2) | Public LFW dataset loader (`fetch_lfw_people`) |
+| Image Processing | Pillow (10.2.0) & OpenCV (`opencv-python-headless`) | In-memory frame conversion and image array manipulation |
+
+---
+
+## 🏛️ Architecture
+
+```mermaid
+flowchart LR
+    subgraph Client["Browser Interface (Localhost)"]
+        UI["Streamlit Pages\n(Enrol, Login, Analysis, Test Log, About)"]
+    end
+
+    subgraph Backend["Local Application Modules"]
+        APP["app.py\n(Router & Controller)"]
+        FACE["face_utils.py\n(MTCNN & InceptionResnetV1)"]
+        DB["db.py\n(SQLite Helpers)"]
+        STYLE["ui.py\n(Theme & Badges)"]
+    end
+
+    subgraph Storage["Local Storage"]
+        SQL[("users.db\n(SQLite)")]
+    end
+
+    UI <--> APP
+    APP --> STYLE
+    APP <--> FACE
+    APP <--> DB
+    DB <--> SQL
+```
+
+Everything runs locally as a self-contained application on a single machine; no external API or separate backend server is needed.
+
+---
+
+## 🚀 Quick Start
+
+### Windows (PowerShell)
 
 ```powershell
+git clone https://github.com/your-username/TrashLock.git
+cd TrashLock
 python -m venv venv
 venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```powershell
 pip install -r requirements.txt
-```
-
-### 4. Run the Application
-
-```powershell
 streamlit run app.py
 ```
 
-The web application opens automatically at `http://localhost:8501`.
+### macOS / Linux
+
+```bash
+git clone https://github.com/your-username/TrashLock.git
+cd TrashLock
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Once started, open **`http://localhost:8501`** in your browser.
+
+> **First-run notice:** On the first run, `facenet-pytorch` automatically downloads its pretrained weights (~107 MB), and the first evaluation on the Analysis page downloads the LFW subset (~200 MB). The very first webcam match is slightly slower while PyTorch loads model weights into memory; subsequent matches run in fractions of a second.
 
 ---
 
-## Testing Checklist
-
-Use this checklist to verify every feature and page before presentations:
-
-- [ ] **1. Enrol Page**:
-  - [ ] Attempt saving with an empty name $\rightarrow$ verify friendly warning appears.
-  - [ ] Capture 3–5 webcam shots (verify photo progress counter increments).
-  - [ ] Enter a name (e.g. `Maya Patel`) and 4-digit PIN (e.g. `4829`) $\rightarrow$ click **Save enrolment**.
-  - [ ] Check that `Maya Patel` appears in the **Enrolled participants** list.
-  - [ ] Attempt enrolling a duplicate name $\rightarrow$ verify duplicate name error prevents overwriting.
-  - [ ] Test individual user deletion using the **Delete** button next to an enrolled name.
-  - [ ] Test **Delete all users** for quick demo resets.
-
-- [ ] **2. Login Page**:
-  - [ ] With no users enrolled $\rightarrow$ verify friendly warning instructs enrolling first.
-  - [ ] With an enrolled user, capture your face $\rightarrow$ verify cosine distance, similarity %, and decision rule.
-  - [ ] If distance $<$ threshold $\rightarrow$ verify large green **`Access granted`** badge and balloons.
-  - [ ] Adjust the sidebar **Match threshold** slider stricter (e.g. `0.20`) or more lenient (e.g. `0.55`) $\rightarrow$ observe instant change in the access decision.
-  - [ ] Toggle **Require PIN** in the header $\rightarrow$ verify face match prompts for PIN, and only correct salted hash grants access.
-
-- [ ] **3. Analysis Page**:
-  - [ ] Navigate to Analysis before loading data $\rightarrow$ verify informative prompt with no exceptions.
-  - [ ] Click **Load LFW sample** $\rightarrow$ watch progress bar extract 512-d embeddings across benchmark faces.
-  - [ ] Verify the 3 top summary metric cards (`People`, `Genuine pairs`, `Impostor pairs`).
-  - [ ] Check Chart 1: FAR and FRR curves intersecting at the marked **EER point**.
-  - [ ] Check Chart 2: Genuine vs. Impostor distance distribution histograms.
-  - [ ] Adjust sidebar threshold slider $\rightarrow$ observe vertical dashed line update on both charts in real time.
-  - [ ] Review performance table comparing active threshold metrics against optimal EER.
-
-- [ ] **4. Test Log Page**:
-  - [ ] Review default experimental scenarios (e.g., front desk lighting, glasses, wrong PIN).
-  - [ ] Use **Add row** with dropdown suggestions (e.g. `Phone photo (screen replay)`, `Printed photo`, `Dim light`) $\rightarrow$ verify new row saves into SQLite with colored Pass/Fail badge.
-  - [ ] Click **Download CSV** $\rightarrow$ verify CSV export downloads cleanly.
-  - [ ] Click **Clear Test Log** $\rightarrow$ verify logs reset.
-
-- [ ] **5. About Page**:
-  - [ ] Read through core concepts (Enrolment, Template, Cosine Distance, Threshold, FAR, FRR, EER).
-  - [ ] Review presentation attack vulnerabilities, permanence risks, and privacy architecture.
-
----
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 biometric-prototype/
-├── app.py             # Streamlit app (sidebar routing for Enrol, Login, Analysis, Test Log, About)
-├── ui.py              # Stitch design system CSS, card helpers, badges, and figure stylers
-├── face_utils.py      # facenet-pytorch (MTCNN + InceptionResnetV1) 512-d embeddings and cosine distance
-├── db.py              # SQLite storage for users and test_logs tables
-├── requirements.txt   # Pinned dependency versions
-├── README.md          # Setup, test checklist, and presentation guide
-├── lfw_data/          # Local LFW benchmark dataset
-└── users.db           # SQLite database (created automatically)
+├── .streamlit/
+│   └── config.toml          # Dark theme tokens (background, primary yellow, cards)
+├── docs/
+│   └── screenshots/         # Interface screenshots and previews
+│       └── .gitkeep
+├── app.py                   # Streamlit application entry point and page routing
+├── db.py                    # SQLite database schema, user CRUD, PIN hashing, test logs
+├── face_utils.py            # MTCNN detection, InceptionResnetV1 embeddings, cosine distance
+├── ui.py                    # Stitch design system CSS, custom cards, and status badges
+├── requirements.txt         # Pinned Python package dependencies
+├── README.md                # Project documentation and walkthrough
+└── users.db                 # Local SQLite database (created automatically, git-ignored)
 ```
 
 ---
 
-## Tech Stack
+## 🔒 Privacy and Ethics
 
-| Component | Role |
-|---|---|
-| **Streamlit** | Interactive wide web UI, webcam input, and data caching (`@st.cache_data`) |
-| **facenet-pytorch (InceptionResnetV1)** | 512-dimensional facial feature representation (pretrained on VGGFace2) |
-| **MTCNN** | Deep learning face detection and alignment |
-| **NumPy & SciPy** | Cosine distance, error curves, and distribution metrics |
-| **scikit-learn** | LFW benchmark dataset loader (`fetch_lfw_people`) |
-| **Matplotlib** | Styled FAR/FRR tradeoff curves and distance distribution histograms |
-| **SQLite (sqlite3)** | Local database for users and test_logs |
-| **hashlib (SHA-256)** | Salted cryptographic hashing for user PINs |
+- **Mathematical templates only**: Raw webcam photos are processed entirely in memory and immediately discarded. Only 512-dimensional floating-point vectors are stored.
+- **Salted PIN hashing**: Fallback PINs are never stored in plaintext. Each PIN is combined with a 32-character random salt and hashed with SHA-256.
+- **Local isolation**: The database `users.db` is git-ignored and never transmitted across the network or committed to source control.
+- **Informed consent**: Only enrol individuals who have explicitly agreed to participate in testing.
+- **Sensitive data**: Facial features constitute personal biometric data; treat all local templates with care.
+
+---
+
+## ⚠️ Limitations and Roadmap
+
+### Known Limitations
+- **No liveness detection**: The current prototype cannot distinguish a live human face from a 2D photograph or a high-resolution phone screen replay.
+- **Small evaluation sample**: Benchmark figures reflect a small subset of clean, frontal benchmark images.
+- **Environmental sensitivity**: Harsh shadows, strong backlights, off-angle head tilts, and heavy accessories can trigger false rejections.
+- **Templates stored unencrypted**: Templates in `users.db` are stored as JSON arrays rather than encrypted at rest.
+
+### Roadmap
+- [ ] Blink-based liveness detection
+- [ ] Larger and more varied dataset
+- [ ] Encrypted templates
+- [ ] Multi-user admin view
+
+---
+
+## 🔧 Troubleshooting
+
+<details>
+<summary>PowerShell script execution blocked</summary>
+
+If activating the virtual environment fails with an execution policy error on Windows, enable script execution for your user account:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+</details>
+
+<details>
+<summary>Port 8501 already in use</summary>
+
+If another service is using port 8501, launch the application on an alternative port:
+
+```powershell
+streamlit run app.py --server.port 8502
+```
+</details>
+
+<details>
+<summary>Webcam not detected or camera access denied</summary>
+
+Ensure your browser has granted camera access permissions to `localhost`. On Windows or macOS, verify that system privacy settings allow your browser to access the webcam.
+</details>
+
+<details>
+<summary>"No face detected" error during enrolment or login</summary>
+
+MTCNN requires clear facial features to detect and crop a face:
+- Face the camera directly.
+- Ensure the room has balanced front lighting and avoid strong backlights or deep shadows.
+- Remove heavy sunglasses or items obscuring your eyes, nose, or mouth.
+</details>
+
+<details>
+<summary>Enrolment invalidation after model changes</summary>
+
+Embedding models project faces into unique mathematical vector spaces. If the underlying model or pretrained weights are ever changed or updated, all previously enrolled users in `users.db` must be deleted and re-enrolled because embeddings from different models are incompatible.
+</details>
+
+---
+
+_This project is an educational prototype and is not intended for production security use._
